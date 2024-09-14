@@ -38,6 +38,7 @@ venv.bak/
 /.pnp
 .pnp.js
 poerty.lock
+poetry.lock
 
 # testing
 /coverage
