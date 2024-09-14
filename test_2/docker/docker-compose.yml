@@ -1,0 +1,48 @@
+version: '3.5'
+
+services:
+
+  game:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    image: game
+    depends_on:
+        - db
+        - rabbit
+    command: bash /app/start.sh
+    restart: "always"
+    ports:
+      - "8000:8000"
+    env_file:
+      - dev.env
+    entrypoint: '/start.sh'
+
+  game_celery:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    image: game_celery
+    depends_on:
+      - db
+      - rabbit
+    command: bash /app/start.sh
+    restart: "always"
+    env_file:
+      - dev.env
+    entrypoint: '/start_celery.sh'
+
+  rabbit:
+    hostname: rabbit
+    image: rabbitmq:3.8.16-management
+    restart: always
+    env_file:
+      - dev.env
+
+  db:
+    image: postgres:latest
+    restart: "always"
+    ports:
+      - '5432:5432'
+    env_file:
+      - dev.env
